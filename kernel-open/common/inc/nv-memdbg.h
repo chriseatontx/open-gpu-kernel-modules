@@ -41,8 +41,8 @@ void nv_memdbg_exit(void);
 
 #else
 
-#define NV_MEMDBG_ADD(ptr, size)
-#define NV_MEMDBG_REMOVE(ptr, size)
+#define NV_MEMDBG_ADD(ptr, size) do { } while (0)
+#define NV_MEMDBG_REMOVE(ptr, size) do { } while (0)
 
 #endif /* NV_MEM_LOGGER */
 

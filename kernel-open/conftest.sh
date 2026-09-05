@@ -6433,6 +6433,19 @@ compile_test() {
             compile_check_conftest "$CODE" "NV_HANDLE_MM_FAULT_HAS_PT_REGS_ARG" "" "types"
         ;;
 
+        pci_resize_resource_has_exclude_bars)
+            # Detect the API itself: stable kernels can backport this change.
+            CODE="
+            #include <linux/pci.h>
+            typeof(pci_resize_resource) conftest_pci_resize_resource;
+            int conftest_pci_resize_resource(struct pci_dev *dev, int bar,
+                                            int size, int exclude_bars) {
+                return 0;
+            }"
+
+            compile_check_conftest "$CODE" "NV_PCI_RESIZE_RESOURCE_HAS_EXCLUDE_BARS" "" "types"
+        ;;
+
         pci_rebar_get_possible_sizes)
             #
             # Determine if the pci_rebar_get_possible_sizes() function is present.

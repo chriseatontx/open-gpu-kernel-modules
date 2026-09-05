@@ -39,7 +39,7 @@
 #define RSA_PSS_PADDING_ZEROS_SIZE_BYTE        (8)
 #define RSA_PSS_TRAILER_FIELD                  (0xbc)
 #define SHIFT_RIGHT_AND_GET_BYTE(val, x)       ((val >> x) & 0xFF)
-#define BITS_TO_BYTES(b)                       (b >> 3)
+#define LIBSPDM_BITS_TO_BYTES_FLOOR(b)         ((b) >> 3)
 
 static const unsigned char zeroes[RSA_PSS_PADDING_ZEROS_SIZE_BYTE] = { 0 };
 
@@ -426,7 +426,7 @@ static bool nvRsaPaddingAddPkcs1PssMgf1
 
     keySize  = mpi_n->nbits;
     msBits   = GET_MOST_SIGNIFICANT_BIT(keySize);
-    emLength = BITS_TO_BYTES(keySize);
+    emLength = LIBSPDM_BITS_TO_BYTES_FLOOR(keySize);
 
     if (msBits == 0)
     {
@@ -608,4 +608,3 @@ bool lkca_rsa_pss_sign
                                         LIBSPDM_SHA384_DIGEST_SIZE);
 #endif
 }
-

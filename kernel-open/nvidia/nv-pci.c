@@ -226,15 +226,28 @@ static int nv_resize_pcie_bars(struct pci_dev *pci_dev) {
     pci_read_config_word(pci_dev, PCI_COMMAND, &cmd);
     pci_write_config_word(pci_dev, PCI_COMMAND, cmd & ~PCI_COMMAND_MEMORY);
 
+#if !defined(NV_PCI_RESIZE_RESOURCE_HAS_EXCLUDE_BARS)
+    /* The older API requires callers to release these resources first. */
     /* Release BAR1 */
     pci_release_resource(pci_dev, NV_GPU_BAR1);
 
     /* Release BAR3 - we don't want to resize it, it's in the same bridge, so we'll want to move it */
     pci_release_resource(pci_dev, NV_GPU_BAR3);
+#endif
 
 resize:
     /* Attempt to resize BAR1 to the largest supported size */
-    r = pci_resize_resource(pci_dev, NV_GPU_BAR1, requested_size, 0);
+#if defined(NV_PCI_RESIZE_RESOURCE_HAS_EXCLUDE_BARS)
+    /*
+     * The new API saves, releases, and restores resources itself. Leave the
+     * original assignments intact until it can save them, and permit only
+     * BAR1 and BAR3 to move, as in the older driver path.
+     */
+    r = pci_resize_resource(pci_dev, NV_GPU_BAR1, requested_size,
+                            ~((1 << NV_GPU_BAR1) | (1 << NV_GPU_BAR3)));
+#else
+    r = pci_resize_resource(pci_dev, NV_GPU_BAR1, requested_size);
+#endif
 
     if (r) {
         if (r == -ENOSPC)
