@@ -66,6 +66,28 @@ that the GPU initializes, or that suspend/resume and CUDA workloads work. A
 live test requires a kernel-specific installation manifest, verified fallback
 boot, and exact rollback steps. Keep the working `6.12.90` kernel intact.
 
+## Kernel-scoped installation scripts
+
+The `tools/` directory contains scripts that deliberately target only
+`6.12.107+deb13-amd64`. The installer expects five uncompressed `.ko` files,
+refuses to overwrite an existing test-kernel file, records every installed
+path, and runs `depmod` only for that kernel. The remover accepts only paths
+under its own test directory and removes only those files. Neither script
+touches the `6.12.90` DKMS installation.
+
+These scripts have not been run. Before using them, verify the boot menu and
+initramfs, inspect module signatures and aliases, and retain the working
+kernel. Example invocation after review:
+
+```sh
+sudo tools/install-test-modules-6.12.107.sh /absolute/path/to/five-built-ko-files
+sudo tools/remove-test-modules-6.12.107.sh
+```
+
+The scripts do not install userspace libraries, create a DKMS registration, or
+change the boot default. A live test still requires a one-time boot into
+`6.12.107`; on failure, select `6.12.90` from the physical boot menu first.
+
 ## References
 
 - [Linux PCI API](https://www.kernel.org/doc/html/latest/driver-api/pci/pci.html)
