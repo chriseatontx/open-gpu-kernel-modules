@@ -8,8 +8,9 @@ version 550.163.01.
 This branch contains a targeted, experimental change for the
 `pci_resize_resource()` build failure in driver 550.163.01 with newer Debian
 6.12 kernel headers. The same one-line change compiled successfully in Debian's
-packaged module build tree for `6.12.107+deb13-amd64`. This upstream source tree
-has not yet been built end to end or tested on hardware.
+packaged module build tree for `6.12.107+deb13-amd64`. The full upstream source build also completed for that kernel, with substantial
+objtool/mitigation warnings that remain unresolved. No hardware test has been
+performed.
 
 Read the [fix notes, validation record, and recovery plan](docs/debian-6.12-pci-resize.md)
 before trying it. This branch targets the four-argument kernel API and will not

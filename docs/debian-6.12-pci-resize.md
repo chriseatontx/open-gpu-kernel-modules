@@ -52,8 +52,8 @@ Do not register this prototype for automatic DKMS builds across all kernels.
 
 ## Validation record
 
-The local test used a copy of the installed **Debian package build tree**,
-containing Debian's kernel interface source and prebuilt core objects. It did
+The initial local test used a copy of the installed **Debian package build tree**,
+containing Debian's kernel interface source and prebuilt core objects. That initial test did
 not compile every file in this GitHub repository. Debian packaging also contains
 compatibility changes that the upstream release alone may lack.
 
@@ -63,7 +63,7 @@ compatibility changes that the upstream release alone may lack.
 | Same tree with the one-line change | Build completed; make exit status 0 |
 | Generated modules | nvidia, nvidia-modeset, nvidia-drm, nvidia-uvm, nvidia-peermem |
 | Module metadata | Version 550.163.01; vermagic targets 6.12.107+deb13-amd64 |
-| Full upstream source build | Not yet performed |
+| Full upstream source build | Completed at commit `1c12344303bd22a68e62d526024a025d18600b81`; exit status 0, with unresolved warnings |
 | Installation or module loading | Not performed |
 | Desktop, CUDA, suspend/resume, GPU stability | Not tested |
 
@@ -104,9 +104,34 @@ modinfo patched/nvidia.ko
 ```
 
 The path inside the Debian package is `nvidia/nv-pci.c`; the corresponding
-upstream path includes the `kernel-open/` prefix. Reproducing a full upstream
-source build is a separate validation step and may reveal additional missing
-Debian patches. Keep firmware and userspace components matched to 550.163.01.
+upstream path includes the `kernel-open/` prefix. The subsequent full upstream source build completed without additional
+source patches, but emitted substantial warnings (see below). Keep firmware and userspace components matched to 550.163.01.
+
+## Full GitHub source build result
+
+The branch at commit `1c12344303bd22a68e62d526024a025d18600b81` was built
+from the repository root, including the core code that the Debian package
+provides as prebuilt objects:
+
+```sh
+make -j4 modules KERNEL_UNAME=6.12.107+deb13-amd64
+```
+
+The build completed with exit status 0 using GCC 14.2.0 (Debian 14.2.0-19)
+and GNU Make 4.4.1. All five modules report version 550.163.01 and a vermagic
+for 6.12.107+deb13-amd64. No additional source changes were needed for this
+compilation. See the [machine-readable result and module hashes](build-6.12.107-results.json).
+Hashes identify these local build artifacts; they are not signed release checksums.
+
+**The build was not warning-free.** The captured log contains 79 compiler
+warning lines, 11,343 objtool naked-return warnings in a MITIGATION_RETHUNK
+build, 158 objtool ENDBR warnings, and 44 other objtool warnings. Counts are
+log occurrences, not unique defects. These require investigation of the build
+flags and kernel mitigation requirements before loading these artifacts.
+Successful linking does not establish runtime safety or correct mitigations.
+The complete log remains local; this public summary includes no recovery files.
+
+No modules were installed or loaded and no boot/package configuration changed.
 
 ## Recovery and live-test plan
 
@@ -140,7 +165,8 @@ installation method; they have not yet been prepared or tested.
 ## Next validation steps
 
 - Review resource-allocation semantics of the fourth argument.
-- Build the full upstream source and identify any required Debian patches.
+- Investigate the full-source build warnings and match Debian/kernel mitigation
+  build settings before treating the generated modules as suitable for loading.
 - Implement API detection and test both old and new headers before treating the
   change as a general compatibility fix.
 - Prepare and verify the installation/rollback procedure before reboot testing.
@@ -153,6 +179,7 @@ installation method; they have not yet been prepared or tested.
 | --- | --- | --- |
 | 2026-09-05 | Add the fourth argument to `pci_resize_resource()` | Debian packaged-tree compilation passes on 6.12.107; runtime untested |
 | 2026-09-05 | Publish experiment scope and recovery plan | No installed system changes |
+| 2026-09-05 | Complete full GitHub source build on 6.12.107 | Five modules generated; substantial objtool warnings unresolved; no installation |
 
 Future changes should update this record with their reason, exact test scope,
 results, and remaining limitations. Keep source changes in reviewable commits.
