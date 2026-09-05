@@ -8,8 +8,9 @@ version 550.163.01.
 This branch contains a targeted, experimental change for the
 `pci_resize_resource()` build failure in driver 550.163.01 with newer Debian
 6.12 kernel headers. The same one-line change compiled successfully in Debian's
-packaged module build tree for `6.12.107+deb13-amd64`. The full upstream source build also completed for that kernel, with substantial
-objtool/mitigation warnings that remain unresolved. No hardware test has been
+packaged module build tree for `6.12.107+deb13-amd64`. The full upstream source build also completed for that kernel. A
+[target-specific build profile](docs/mitigation-build.md) eliminated the objtool
+mitigation warnings; 79 compiler warnings remain. No hardware test has been
 performed.
 
 Read the [fix notes, validation record, and recovery plan](docs/debian-6.12-pci-resize.md)

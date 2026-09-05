@@ -1,0 +1,53 @@
+{
+  "source_commit": "10df15289c236f5d6930458aa89404f78d5391f7",
+  "kernel": "6.12.107+deb13-amd64",
+  "extra_cflags_environment": "-mfunction-return=thunk-extern -fno-asynchronous-unwind-tables -fno-unwind-tables",
+  "command": "make --output-sync=target -j4 modules KERNEL_UNAME=6.12.107+deb13-amd64",
+  "exit_status": 0,
+  "objtool_warnings": 0,
+  "compiler_warnings": {
+    "missing_prototypes": 52,
+    "empty_body": 25,
+    "enum_int_mismatch": 1,
+    "macro_redefinition": 1
+  },
+  "modules": [
+    {
+      "file": "nvidia-drm.ko",
+      "sha256": "05adea13e9a01f4d7044fb7e49b2a7cdffaa212d58681e369cb71f0100e67239",
+      "version": "550.163.01",
+      "vermagic": "6.12.107+deb13-amd64 SMP preempt mod_unload modversions",
+      "license": "Dual MIT/GPL"
+    },
+    {
+      "file": "nvidia-modeset.ko",
+      "sha256": "ca315a198f8d8ab66bae3cc6b5f452b0b39eb39545f8349cb34529003f1fcc74",
+      "version": "550.163.01",
+      "vermagic": "6.12.107+deb13-amd64 SMP preempt mod_unload modversions",
+      "license": "Dual MIT/GPL"
+    },
+    {
+      "file": "nvidia-peermem.ko",
+      "sha256": "39cebf47d7bd6778237cfa6ab55267518b3eabc43735b8dfc826a09530da7801",
+      "version": "550.163.01",
+      "vermagic": "6.12.107+deb13-amd64 SMP preempt mod_unload modversions",
+      "license": "Dual BSD/GPL"
+    },
+    {
+      "file": "nvidia-uvm.ko",
+      "sha256": "c089cbc66e84addde0e09edc78b7f30e10ebe0df36494ead78cd429633ade26b",
+      "version": "550.163.01",
+      "vermagic": "6.12.107+deb13-amd64 SMP preempt mod_unload modversions",
+      "license": "Dual MIT/GPL"
+    },
+    {
+      "file": "nvidia.ko",
+      "sha256": "97444821640324a6922628812a395c8fea74d39b2a9f9bb21eb8b0a6f40cb31b",
+      "version": "550.163.01",
+      "vermagic": "6.12.107+deb13-amd64 SMP preempt mod_unload modversions",
+      "license": "Dual MIT/GPL"
+    }
+  ],
+  "installed": false,
+  "hardware_tested": false
+}

@@ -1,6 +1,10 @@
 # Experimental fix: NVIDIA 550 and Debian 6.12 PCI API compatibility
 
 Status as of September 5, 2026: **compilation prototype; no hardware validation**.
+
+Update: a [target-specific build profile](mitigation-build.md) now produces all
+five modules with zero objtool warnings. The original build results below are
+retained as history; 79 compiler warnings and runtime validation remain.
 This is an independent experiment, not an NVIDIA or Debian release.
 
 ## Problem
@@ -165,8 +169,8 @@ installation method; they have not yet been prepared or tested.
 ## Next validation steps
 
 - Review resource-allocation semantics of the fourth argument.
-- Investigate the full-source build warnings and match Debian/kernel mitigation
-  build settings before treating the generated modules as suitable for loading.
+- Review the remaining 79 compiler warnings after the mitigation build profile
+  eliminated the objtool warnings.
 - Implement API detection and test both old and new headers before treating the
   change as a general compatibility fix.
 - Prepare and verify the installation/rollback procedure before reboot testing.
@@ -179,7 +183,8 @@ installation method; they have not yet been prepared or tested.
 | --- | --- | --- |
 | 2026-09-05 | Add the fourth argument to `pci_resize_resource()` | Debian packaged-tree compilation passes on 6.12.107; runtime untested |
 | 2026-09-05 | Publish experiment scope and recovery plan | No installed system changes |
-| 2026-09-05 | Complete full GitHub source build on 6.12.107 | Five modules generated; substantial objtool warnings unresolved; no installation |
+| 2026-09-05 | Complete full GitHub source build on 6.12.107 | Five modules generated; initial objtool warnings recorded; no installation |
+| 2026-09-05 | Test target-specific mitigation flags | Zero objtool warnings; 79 compiler warnings remain; no installation |
 
 Future changes should update this record with their reason, exact test scope,
 results, and remaining limitations. Keep source changes in reviewable commits.
