@@ -51,6 +51,7 @@ EXTRA_CFLAGS='-mfunction-return=thunk-extern -fno-asynchronous-unwind-tables -fn
 | Target | Detected API | Build result | Objtool warnings |
 | --- | --- | --- | ---: |
 | `6.12.90+deb13-amd64` | Three arguments | Exit status 0; five modules | 0 |
+| `6.12.105+deb13-amd64` | Four arguments | Exit status 0; five modules | 0 |
 | `6.12.107+deb13-amd64` | Four arguments | Exit status 0; five modules | 0 |
 
 The final logs still contain the existing compiler warnings for missing
@@ -68,8 +69,10 @@ boot, and exact rollback steps. Keep the working `6.12.90` kernel intact.
 
 ## Kernel-scoped installation scripts
 
-The `tools/` directory contains scripts that deliberately target only
-`6.12.107+deb13-amd64`. The installer expects five uncompressed `.ko` files,
+The `tools/` directory contains scripts that deliberately target only the
+tested `6.12.105+deb13-amd64` or `6.12.107+deb13-amd64` kernels. Set
+`NVIDIA_TEST_KERNEL` to select one; `6.12.90` is explicitly rejected. The
+installer expects five uncompressed `.ko` files,
 refuses to overwrite an existing test-kernel file, records every installed
 path, and runs `depmod` only for that kernel. The remover accepts only paths
 under its own test directory and removes only those files. Neither script
@@ -80,8 +83,10 @@ initramfs, inspect module signatures and aliases, and retain the working
 kernel. Example invocation after review:
 
 ```sh
-sudo tools/install-test-modules-6.12.107.sh /absolute/path/to/five-built-ko-files
-sudo tools/remove-test-modules-6.12.107.sh
+sudo NVIDIA_TEST_KERNEL=6.12.105+deb13-amd64 \
+  tools/install-test-modules-6.12.107.sh /absolute/path/to/five-built-ko-files
+sudo NVIDIA_TEST_KERNEL=6.12.105+deb13-amd64 \
+  tools/remove-test-modules-6.12.107.sh
 ```
 
 The scripts do not install userspace libraries, create a DKMS registration, or
