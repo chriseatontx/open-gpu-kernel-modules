@@ -88,6 +88,20 @@ The scripts do not install userspace libraries, create a DKMS registration, or
 change the boot default. A live test still requires a one-time boot into
 `6.12.107`; on failure, select `6.12.90` from the physical boot menu first.
 
+## Local boot-readiness check
+
+On the test machine, `6.12.90+deb13-amd64` is installed with a valid initramfs
+and the five existing Debian NVIDIA modules under its DKMS directory. The
+running driver is active from that installation. The `6.12.107+deb13-amd64`
+image is present but its package is half-configured and no corresponding
+`initrd.img-6.12.107+deb13-amd64` exists. It is therefore not ready for a live
+test. No package repair, initramfs generation, GRUB change, module installation,
+or reboot has been performed.
+
+The protected `/boot/grub/grub.cfg` could not be read without the user's sudo
+password. Verify the menu entries locally before proceeding; do not assume that
+the saved-default settings select the fallback after a test reboot.
+
 ## References
 
 - [Linux PCI API](https://www.kernel.org/doc/html/latest/driver-api/pci/pci.html)
