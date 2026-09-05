@@ -234,7 +234,7 @@ static int nv_resize_pcie_bars(struct pci_dev *pci_dev) {
 
 resize:
     /* Attempt to resize BAR1 to the largest supported size */
-    r = pci_resize_resource(pci_dev, NV_GPU_BAR1, requested_size);
+    r = pci_resize_resource(pci_dev, NV_GPU_BAR1, requested_size, 0);
 
     if (r) {
         if (r == -ENOSPC)

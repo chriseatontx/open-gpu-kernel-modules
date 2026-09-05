@@ -3,6 +3,20 @@
 This is the source release of the NVIDIA Linux open GPU kernel modules,
 version 550.163.01.
 
+## Experimental Debian 6.12 compatibility branch
+
+This branch contains a targeted, experimental change for the
+`pci_resize_resource()` build failure in driver 550.163.01 with newer Debian
+6.12 kernel headers. The same one-line change compiled successfully in Debian's
+packaged module build tree for `6.12.107+deb13-amd64`. This upstream source tree
+has not yet been built end to end or tested on hardware.
+
+Read the [fix notes, validation record, and recovery plan](docs/debian-6.12-pci-resize.md)
+before trying it. This branch targets the four-argument kernel API and will not
+build unchanged against older three-argument headers, including the working
+6.12.90 fallback. The upstream installation instructions below are retained for
+reference; they are not the procedure for this experiment.
+
 
 ## How to Build
 
