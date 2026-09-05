@@ -59,6 +59,30 @@ prototypes in test/helper code and related source warnings. They do not stop
 the build. See the per-run logs retained locally. No module was installed or
 loaded, and no package, initramfs, or boot configuration changed.
 
+## Live test result
+
+On September 5, 2026, the rebuilt modules were installed only for
+`6.12.105+deb13-amd64`, and the machine booted the existing GRUB entry for that
+kernel. The fallback `6.12.90+deb13-amd64` was not modified or selected.
+
+After boot, the NVIDIA modules loaded and PCI device `01:00.0` was bound to
+`nvidia`. Device nodes were not created automatically, so this command was run
+once:
+
+```sh
+sudo nvidia-modprobe -u -c 0
+```
+
+`nvidia-smi` then succeeded and reported NVIDIA driver `550.163.01`, CUDA
+12.4, an RTX 2080 at `00000000:01:00.0`, 37°C, 9 W, and 267 MiB in use. Xorg,
+the window manager, and a ComfyUI Python process were visible as GPU clients.
+No communication failure remained after device-node creation.
+
+This confirms module loading, GPU initialization, display use, and a live CUDA
+client on this machine. It does not yet cover suspend/resume, repeated reboot,
+long-running GPU workloads, or automatic device-node creation on every boot.
+Preserve the working `6.12.90` fallback until those checks are complete.
+
 ## What this does not prove
 
 Compilation proves that both API forms are accepted and that the two caller

@@ -135,7 +135,9 @@ flags and kernel mitigation requirements before loading these artifacts.
 Successful linking does not establish runtime safety or correct mitigations.
 The complete log remains local; this public summary includes no recovery files.
 
-No modules were installed or loaded and no boot/package configuration changed.
+At the time of this build record, no modules were installed or loaded and no
+boot/package configuration had changed. A later live test is recorded in
+`api-aware-build.md`.
 
 ## Recovery and live-test plan
 
